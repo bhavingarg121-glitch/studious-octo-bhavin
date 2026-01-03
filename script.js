@@ -100,5 +100,39 @@ if (!newR.title) {
   return;
 }
 image: encodeURI((fd.get("image")||"").trim()),
+npm init -y
+npm install express cors
+// server.js
+const express = require('express');
+const path = require('path');
+const app = express();
 
+app.use(express.static('public')); // serve your frontend files
+app.use(express.json());
+
+// Mock database or real one (MongoDB, etc.)
+const imageData = {
+  "1": {
+    title: "Sunset Beach",
+    fullUrl: "/images/full/photo1-full.jpg",
+    description: "Beautiful sunset captured in 2025.",
+    menuItems: ["Download", "Share", "Edit", "Delete"] // if you want full menu
+  },
+  "2": { /* ... */ }
+};
+
+app.get('/api/image/:id', (req, res) => {
+  const id = req.params.id;
+  const data = imageData[id];
+
+  if (!data) {
+    return res.status(404).json({ error: "Image not found" });
+  }
+
+  res.json(data); // This feeds the modal/menu with animations on frontend
+});
+
+app.listen(3000, () => {
+  console.log('Server running on http://localhost:3000');
+});
 
